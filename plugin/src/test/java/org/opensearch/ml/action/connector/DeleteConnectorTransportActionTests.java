@@ -13,6 +13,7 @@ import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 
+import org.opensearch.OpenSearchStatusException;
 import org.apache.lucene.search.TotalHits;
 import org.junit.Before;
 import org.junit.Rule;
@@ -178,7 +179,7 @@ public class DeleteConnectorTransportActionTests extends OpenSearchTestCase {
         }).when(client).search(any(), any());
 
         deleteConnectorTransportAction.doExecute(null, mlConnectorDeleteRequest, actionListener);
-        ArgumentCaptor<Exception> argumentCaptor = ArgumentCaptor.forClass(MLValidationException.class);
+        ArgumentCaptor<Exception> argumentCaptor = ArgumentCaptor.forClass(OpenSearchStatusException.class);
         verify(actionListener).onFailure(argumentCaptor.capture());
         assertEquals(
             "1 models are still using this connector, please delete or update the models first: [model_ID]",
